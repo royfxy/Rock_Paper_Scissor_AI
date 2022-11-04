@@ -45,8 +45,8 @@ def capture_gesture(data_length, hands, text_interval = 15):
         if results.multi_hand_world_landmarks:
             has_hand_frame += 1
             if has_hand_frame < text_interval:
-                # display text "stone" on the center of screen
-                image = text_animation("stone", has_hand_frame, image, text_interval)
+                # display text "rock" on the center of screen
+                image = text_animation("rock", has_hand_frame, image, text_interval)
             elif has_hand_frame < text_interval * 2:
                 # display text "paper" on the screen
                 image = text_animation("paper", has_hand_frame, image, text_interval)

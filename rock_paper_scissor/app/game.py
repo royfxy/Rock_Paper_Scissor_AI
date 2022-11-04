@@ -159,7 +159,7 @@ class Game():
                     elif prediction == 1:
                         gesture = "paper"
                     elif prediction == 2:
-                        gesture = "stone"
+                        gesture = "rock"
                 elif current_frame < pending_time + animation_time:
                     video_frame += 1
                 else:
@@ -171,13 +171,13 @@ class Game():
                     elif static_prediction == 1:
                         final_gesture = "paper"
                     elif static_prediction == 2:
-                        final_gesture = "stone"
+                        final_gesture = "rock"
                     # determin if the player wins
                     if gesture == final_gesture:
                         print("DRAW")
                         border_computer_color = (255, 0, 0)
                         border_player_color = (255, 0, 0)
-                    elif (gesture == "scissor" and final_gesture == "paper") or (gesture == "paper" and final_gesture == "stone") or (gesture == "stone" and final_gesture == "scissor"): 
+                    elif (gesture == "scissor" and final_gesture == "paper") or (gesture == "paper" and final_gesture == "rock") or (gesture == "rock" and final_gesture == "scissor"): 
                         print("COMPUTER WIN")
                         border_computer_color = (0, 255, 0)
                     else:
