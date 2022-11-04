@@ -133,3 +133,6 @@ dmypy.json
 
 # models
 *.pth
+
+# dataset
+*.npy

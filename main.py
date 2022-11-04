@@ -1,9 +1,8 @@
 import argparse
 from rock_paper_scissor.app.game import Game
 from rock_paper_scissor.network.gesture_prediction.data_capture import capture_data
+from rock_paper_scissor.network.gesture_prediction.train import train_model
 
-import mediapipe as mp
-import time
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -24,5 +23,7 @@ if __name__ == '__main__':
     elif mode == 'data_cap':
         file_pth = "rock_paper_scissor/network/gesture_prediction/data/" + args.gesture + ".npy"
         capture_data(file_pth, 3)
+    elif mode == 'train':
+        train_model(prediction_model_pth)
     else:
         print("invalid mode")
