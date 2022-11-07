@@ -1,7 +1,7 @@
 import argparse
 from rock_paper_scissor.app.game import Game
 from rock_paper_scissor.network.gesture_prediction.data_capture import capture_data
-from rock_paper_scissor.network.gesture_prediction.train import train_model
+from rock_paper_scissor.network.gesture_prediction.train import train_model, k_fold_cross_validation_train
 
 
 def parse_args():
@@ -9,6 +9,7 @@ def parse_args():
     parser.add_argument('--run', type=str, default='game', help='run game or train model')
     parser.add_argument('--model_name', type=str, default='model.pth', help='model path')
     parser.add_argument('--gesture', type=str, default='paper', help='gesture to capture')
+    parser.add_argument('--k_fold', type=int, default=1, help='k fold cross validation')
 
     return parser.parse_args()
 
@@ -24,6 +25,9 @@ if __name__ == '__main__':
         file_pth = "rock_paper_scissor/network/gesture_prediction/data/" + args.gesture + ".npy"
         capture_data(file_pth, 3)
     elif mode == 'train':
-        train_model(prediction_model_pth)
+        if args.k_fold == 1:
+            train_model(prediction_model_pth)
+        else:
+            k_fold_cross_validation_train(args.k_fold, prediction_model_pth)
     else:
         print("invalid mode")

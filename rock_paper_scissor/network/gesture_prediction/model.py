@@ -9,7 +9,7 @@ class Model(nn.Module):
         self.conv1 = nn.Conv2d(3, 32, 3, padding=1)
         self.conv2 = nn.Conv2d(32, 64, 3, padding=0)
         self.dropout1 = nn.Dropout2d(0.25)
-        self.dropout2 = nn.Dropout2d(0.5)
+        self.dropout2 = nn.Dropout2d(0.25)
         self.fc1 = nn.Linear(64 * 6 * 9, 128)
         self.fc2 = nn.Linear(128, 3)
 
