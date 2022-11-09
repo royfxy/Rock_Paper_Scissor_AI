@@ -9,7 +9,8 @@ from rock_paper_scissor.network.gesture_recognition.model import Hand_MLP
 from rock_paper_scissor.utils.keypoints_utils import landmark_to_array, fix_orientation, pre_process_landmark
 
 import os
-os.environ['KMP_DUPLICATE_LIB_OK']='True'
+os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
+
 
 class Game():
 
@@ -23,20 +24,22 @@ class Game():
         mp_hands = mp.solutions.hands
 
         self.hands = mp_hands.Hands(
-                        max_num_hands=1,
-                        min_detection_confidence=0.5,
-                        min_tracking_confidence=0.3)
+            max_num_hands=1,
+            min_detection_confidence=0.5,
+            min_tracking_confidence=0.3)
         self.prediction_model_pth = prediction_model_pth
         self.recognition_model_pth = recognition_model_pth
 
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.device = torch.device(
+            "cuda" if torch.cuda.is_available() else "cpu")
 
         # load model
         self.prediction_model = Model().to(self.device)
         self.prediction_model.load_state_dict(torch.load(prediction_model_pth))
 
         self.recognition_model = Hand_MLP(63, 30, 3).to(self.device)
-        self.recognition_model.load_state_dict(torch.load(recognition_model_pth))
+        self.recognition_model.load_state_dict(
+            torch.load(recognition_model_pth))
 
     def play(self):
         self.game(self.hands, 50, 15, 4)
@@ -49,7 +52,7 @@ class Game():
             return cv2.imread(file_name)
 
     # def predic static gesture
-    def _recognize_gesture(self,keypoints):
+    def _recognize_gesture(self, keypoints):
         # input 1*42
         # keypoints 21*3
         data = np.array(keypoints)
@@ -75,8 +78,8 @@ class Game():
         _, predicted = torch.max(output.data, 1)
         return predicted
 
-
     # extract keypoints
+
     def extract_keypoints(self, img, hands):
         img.flags.writeable = False
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -84,7 +87,8 @@ class Game():
         img.flags.writeable = True
         img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
         if mp_results.multi_hand_world_landmarks:
-            result = landmark_to_array(mp_results.multi_hand_world_landmarks[0])
+            result = landmark_to_array(
+                mp_results.multi_hand_world_landmarks[0])
             result = fix_orientation(result)
             return result
         else:
@@ -97,8 +101,9 @@ class Game():
         # flip image
         image = cv2.flip(image, 1)
         # add a padding on the right side of the image
-        image = cv2.copyMakeBorder(image, 0, 0, 720, 0, cv2.BORDER_CONSTANT, value=[0, 0, 0])
-        
+        image = cv2.copyMakeBorder(
+            image, 0, 0, 720, 0, cv2.BORDER_CONSTANT, value=[0, 0, 0])
+
         if gesture_img is not None:
             # resize gesture image to 720*540
             gesture_img = cv2.resize(gesture_img, (720, 540))
@@ -110,8 +115,8 @@ class Game():
         image = cv2.rectangle(image, (3, 3), (717, 537), computer_color, 6)
         return image
 
-
     # capture gesture
+
     def game(self, hands, pending_time=100, recording_time=15, animation_time=7, static_gesture_wait_time=5):
         # initialize camera
         cap = cv2.VideoCapture(0)
@@ -175,19 +180,22 @@ class Game():
                         print("DRAW")
                         border_computer_color = (255, 0, 0)
                         border_player_color = (255, 0, 0)
-                    elif (gesture == "scissor" and final_gesture == "paper") or (gesture == "paper" and final_gesture == "rock") or (gesture == "rock" and final_gesture == "scissor"): 
+                    elif (gesture == "scissor" and final_gesture == "paper") or (gesture == "paper" and final_gesture == "rock") or (gesture == "rock" and final_gesture == "scissor"):
                         print("COMPUTER WIN")
                         border_computer_color = (0, 255, 0)
                     else:
                         print("PLAYER WIN")
                         border_player_color = (0, 255, 0)
-                    
+
                 # get frame of gesture
-                frame = self._get_frame(Game._VIDEO_FRAME_PATH, video_frame, gesture)
+                frame = self._get_frame(
+                    Game._VIDEO_FRAME_PATH, video_frame, gesture)
                 # draw frame
-                image = self.draw_frame(image, frame, border_computer_color, border_player_color)
+                image = self.draw_frame(
+                    image, frame, border_computer_color, border_player_color)
                 # draw text
-                cv2.putText(image, gesture, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+                cv2.putText(image, gesture, (10, 30), cv2.FONT_HERSHEY_SIMPLEX,
+                            1, (255, 255, 255), 2, cv2.LINE_AA)
                 current_frame += 1
                 # print(current_frame, video_frame)
             else:
@@ -200,7 +208,8 @@ class Game():
                     final_gesture = "pending"
                     border_computer_color = (0, 0, 0)
                     border_player_color = (0, 0, 0)
-                image = self.draw_frame(image, frame, border_computer_color, border_player_color)
+                image = self.draw_frame(
+                    image, frame, border_computer_color, border_player_color)
             cv2.imshow('MediaPipe Hands', image)
             if cv2.waitKey(5) & 0xFF == 27:
                 break

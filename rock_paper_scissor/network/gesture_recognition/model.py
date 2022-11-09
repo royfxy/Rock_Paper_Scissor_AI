@@ -3,14 +3,15 @@ import torch.nn as nn
 
 class Hand_MLP(nn.Module):
     """MLP encoder module."""
+
     def __init__(self, n_in, n_hid, n_out):
         super(Hand_MLP, self).__init__()
-        self.dropout_1 = nn.Dropout(p = 0.2)
-        self.fc1 = nn.Linear(n_in, n_hid, bias = True)
-        self.dropout_2 = nn.Dropout(p = 0.5)
-        self.fc2 = nn.Linear(n_hid, 10, bias = True)
+        self.dropout_1 = nn.Dropout(p=0.2)
+        self.fc1 = nn.Linear(n_in, n_hid, bias=True)
+        self.dropout_2 = nn.Dropout(p=0.5)
+        self.fc2 = nn.Linear(n_hid, 10, bias=True)
         self.relu = nn.ReLU()
-        self.fc3 = nn.Linear(10,n_out, bias = True)
+        self.fc3 = nn.Linear(10, n_out, bias=True)
         self.softmax = nn.Softmax(dim=1)
         self.init_weights()
 
@@ -21,7 +22,7 @@ class Hand_MLP(nn.Module):
             elif isinstance(m, nn.BatchNorm1d):
                 m.weight.data.fill_(1)
                 m.bias.data.zero_()
-    
+
     def forward(self, x):
         x = self.dropout_1(x)
         x = self.fc1(x)
@@ -32,4 +33,3 @@ class Hand_MLP(nn.Module):
         x = self.fc3(x)
         x = self.softmax(x)
         return x
-    

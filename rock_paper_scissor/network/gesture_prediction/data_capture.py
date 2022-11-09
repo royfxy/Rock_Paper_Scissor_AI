@@ -1,3 +1,5 @@
+from rock_paper_scissor.utils.keypoints_utils import landmark_to_array, fix_orientation
+from rock_paper_scissor.utils.ui import text_animation
 from sre_constants import SRE_FLAG_DEBUG
 import time
 import cv2
@@ -8,17 +10,16 @@ import numpy as np
 import sys
 sys.path.append("..")
 
-from rock_paper_scissor.utils.ui import text_animation
-from rock_paper_scissor.utils.keypoints_utils import landmark_to_array, fix_orientation
 
 cap = cv2.VideoCapture(0)
 
 dataset = []
 
-def capture_gesture(data_length, hands, text_interval = 15):
+
+def capture_gesture(data_length, hands, text_interval=15):
     """
     Capture gesture data from webcam
-    
+
     Parameters:
     data_length (int): number of frames to capture
     hands (mediapipe.solutions.hands): mediapipe hands object
@@ -46,17 +47,21 @@ def capture_gesture(data_length, hands, text_interval = 15):
             has_hand_frame += 1
             if has_hand_frame < text_interval:
                 # display text "rock" on the center of screen
-                image = text_animation("rock", has_hand_frame, image, text_interval)
+                image = text_animation(
+                    "rock", has_hand_frame, image, text_interval)
             elif has_hand_frame < text_interval * 2:
                 # display text "paper" on the screen
-                image = text_animation("paper", has_hand_frame, image, text_interval)
+                image = text_animation(
+                    "paper", has_hand_frame, image, text_interval)
             elif has_hand_frame < text_interval * 3:
                 # display text "scissor" on the screen
-                image = text_animation("scissor", has_hand_frame, image, text_interval)
+                image = text_animation(
+                    "scissor", has_hand_frame, image, text_interval)
             elif has_hand_frame < text_interval * 4:
                 # display text "shoot" on the screen
-                image = text_animation("shoot", has_hand_frame, image, text_interval, color=(0, 255, 0))
-            
+                image = text_animation(
+                    "shoot", has_hand_frame, image, text_interval, color=(0, 255, 0))
+
             # exit loop when last text animation is displayed
             if has_hand_frame == text_interval * 4:
                 break
@@ -65,10 +70,11 @@ def capture_gesture(data_length, hands, text_interval = 15):
                 captured_frame_count += 1
                 # uncomment the following line to display a red border when capturing data
                 # image = cv2.rectangle(image, (0, 0), (image.shape[1], image.shape[0]), (0, 0, 255), 5)
-                
+
                 if captured_frame_count > data_length:
                     continue
-                landmark_array = landmark_to_array(results.multi_hand_world_landmarks[0])
+                landmark_array = landmark_to_array(
+                    results.multi_hand_world_landmarks[0])
                 landmark_array = fix_orientation(landmark_array)
                 data.append(landmark_array)
         cv2.imshow('MediaPipe Hands', image)
@@ -77,12 +83,12 @@ def capture_gesture(data_length, hands, text_interval = 15):
     dataset.append(data)
 
 
-def capture_data(file_name, data_length, text_interval = 15):
+def capture_data(file_name, data_length, text_interval=15):
     mp_hands = mp.solutions.hands
     with mp_hands.Hands(
-        model_complexity=0,
-        min_detection_confidence=0.5,
-        min_tracking_confidence=0.5) as hands:
+            model_complexity=0,
+            min_detection_confidence=0.5,
+            min_tracking_confidence=0.5) as hands:
 
         for i in range(data_length):
             start_time = time.time()

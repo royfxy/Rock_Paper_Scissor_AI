@@ -1,6 +1,7 @@
 import numpy as np
 import torch
 
+
 class RockPaperScissorDataset(torch.utils.data.Dataset):
     def __init__(self, data, labels, transform=None):
         self.data = data
@@ -16,6 +17,7 @@ class RockPaperScissorDataset(torch.utils.data.Dataset):
         else:
             return self.data[idx], self.labels[idx]
 
+
 def read_data():
     paper_data_path = "rock_paper_scissor/network/gesture_prediction/data/paper.npy"
     rock_data_path = "rock_paper_scissor/network/gesture_prediction/data/rock.npy"
@@ -29,5 +31,6 @@ def read_data():
     scissor_data = scissor_data[:, :15, :]
     # concatenate data
     data = np.concatenate((paper_data, rock_data, scissor_data), axis=0)
-    labels = np.concatenate((np.repeat(0, len(paper_data)), np.repeat(1, len(rock_data)), np.repeat(2, len(scissor_data))))
+    labels = np.concatenate((np.repeat(0, len(paper_data)), np.repeat(
+        1, len(rock_data)), np.repeat(2, len(scissor_data))))
     return data, labels
