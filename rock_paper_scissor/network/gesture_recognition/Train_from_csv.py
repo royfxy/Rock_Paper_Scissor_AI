@@ -1,13 +1,10 @@
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 from torch import optim
 from torch.autograd import Variable
 import numpy as np
-import argparse
 from tqdm import tqdm
 import copy
-import random
 import matplotlib.pyplot as plt
 
 
@@ -20,13 +17,6 @@ np.random.shuffle(whole_dataset)
 X_dataset = whole_dataset[:,1:]
 y_dataset = whole_dataset[:,:1].astype('int32').reshape(len(whole_dataset),)
 
-
-
-# X_dataset = np.loadtxt(dataset, delimiter=',', dtype='float32', usecols=list(range(1, (21 * 3) + 1)))
-# y_dataset = np.loadtxt(dataset, delimiter=',', dtype='int32', usecols=(0))
-
-print(X_dataset.shape)
-print(y_dataset.shape)
 
 class Hand_MLP(nn.Module):
     """MLP encoder module."""
@@ -81,11 +71,6 @@ class SimpleDataset(Dataset):
     def __len__(self):
         return len(self.x)
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--dataset_name', type=str, default='Hand')
-parser.add_argument('--batch_size', type=int, default=32)
-args = parser.parse_args()
-
 acc = 0
 total_result = len(X_dataset)
 correct_result = 0
@@ -136,9 +121,7 @@ def get_validation_loss(model, Val, valid_dataloader):
         
     return np.mean(np.array(val_loss)),accuracy
 
-def train_model_static(recognition_model_pth):
-
-    epoch_num = 200
+def train_model_static(recognition_model_pth, epoch_num=200):
     best_model = None
     min_epochs = 5
     min_val_loss = 5
@@ -156,9 +139,9 @@ def train_model_static(recognition_model_pth):
 
 
     train_dataset = SimpleDataset(train_x, train_y)
-    train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size = args.batch_size, shuffle=True, num_workers=0)
+    train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size = 32, shuffle=True, num_workers=0)
     valid_dataset = SimpleDataset(valid_x, valid_y)
-    valid_dataloader = torch.utils.data.DataLoader(valid_dataset, batch_size = args.batch_size, shuffle=True)
+    valid_dataloader = torch.utils.data.DataLoader(valid_dataset, batch_size = 32, shuffle=True)
 
     model = Hand_MLP(63,30,3)
     optimizer = optim.Adam(model.parameters(), lr = 1e-3)

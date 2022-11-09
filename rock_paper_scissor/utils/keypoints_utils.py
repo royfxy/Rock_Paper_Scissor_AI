@@ -26,39 +26,50 @@ def fix_orientation(landmarks):
   return landmarks
 
 
-def pre_process_landmark(landmark_list):
-    
-    temp_landmark_list = []
-
+def pre_process_landmark(landmark_list_xyz):
+    temp_landmark_list_xyz = []
     # Convert to relative coordinates
     origin_x = None
     origin_y = None
-    
-    for idx, landmark_point in enumerate(landmark_list):
-        
+    origin_z = None
+
+    for idx, landmark_point in enumerate(landmark_list_xyz):
         if idx == 0:
+
             origin_x = landmark_point[0]
+
             origin_y = landmark_point[1]
 
-        xPos = landmark_list[idx][0] - origin_x
-        yPos = landmark_list[idx][1] - origin_y
-        
-        
-        temp_landmark_list.append([xPos,yPos])
-        
+            origin_z = landmark_point[2]
+
+           
+
+        xPos = landmark_list_xyz[idx][0] - origin_x
+
+        yPos = landmark_list_xyz[idx][1] - origin_y
+
+        zPos = landmark_list_xyz[idx][2] - origin_z
+
+
+        temp_landmark_list_xyz.append([xPos,yPos,zPos])
+
+       
+
     # Convert to a one-dimensional list
-    temp_landmark_list = list(
-        itertools.chain.from_iterable(temp_landmark_list))
+
+    temp_landmark_list_xyz = list(
+
+        itertools.chain.from_iterable(temp_landmark_list_xyz))
+
+
 
     # Normalization
-    max_value = max(list(map(abs, temp_landmark_list)))
 
+    max_value = max(list(map(abs, temp_landmark_list_xyz)))
     def normalize_(n):
         return n / max_value
-
-    temp_landmark_list = list(map(normalize_, temp_landmark_list))
-
-    return temp_landmark_list
+    temp_landmark_list_xyz = list(map(normalize_, temp_landmark_list_xyz))
+    return temp_landmark_list_xyz
 
 if __name__ == '__main__':
 

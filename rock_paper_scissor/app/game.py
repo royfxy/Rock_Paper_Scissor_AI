@@ -53,8 +53,6 @@ class Game():
         # input 1*42
         # keypoints 21*3
         data = np.array(keypoints)
-        # drop z axis
-        data = data[:, :2]
         data = pre_process_landmark(data)
         data = np.array(data)
 
