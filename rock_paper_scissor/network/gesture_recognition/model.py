@@ -12,8 +12,6 @@ class Hand_MLP(nn.Module):
         self.relu = nn.ReLU()
         self.fc3 = nn.Linear(10,n_out, bias = True)
         self.softmax = nn.Softmax(dim=1)
-        
-        # self.dropout_2 = nn.Dropout(p = 0.5)
         self.init_weights()
 
     def init_weights(self):
@@ -27,10 +25,11 @@ class Hand_MLP(nn.Module):
     def forward(self, x):
         x = self.dropout_1(x)
         x = self.fc1(x)
+        x = self.relu(x)
         x = self.dropout_2(x)
         x = self.fc2(x)
         x = self.relu(x)
         x = self.fc3(x)
         x = self.softmax(x)
         return x
-
+    
