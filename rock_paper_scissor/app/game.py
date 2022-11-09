@@ -35,7 +35,7 @@ class Game():
         self.prediction_model = Model().to(self.device)
         self.prediction_model.load_state_dict(torch.load(prediction_model_pth))
 
-        self.recognition_model = Hand_MLP(42, 20, 3).to(self.device)
+        self.recognition_model = Hand_MLP(63, 30, 3).to(self.device)
         self.recognition_model.load_state_dict(torch.load(recognition_model_pth))
 
     def play(self):
@@ -167,11 +167,11 @@ class Game():
                 if current_frame == pending_time + animation_time + static_gesture_wait_time:
                     static_prediction = self._recognize_gesture(keypoints)
                     if static_prediction == 0:
-                        final_gesture = "scissor"
-                    elif static_prediction == 1:
-                        final_gesture = "paper"
-                    elif static_prediction == 2:
                         final_gesture = "rock"
+                    elif static_prediction == 1:
+                        final_gesture = "scissor"
+                    elif static_prediction == 2:
+                        final_gesture = "paper"
                     # determin if the player wins
                     if gesture == final_gesture:
                         print("DRAW")
