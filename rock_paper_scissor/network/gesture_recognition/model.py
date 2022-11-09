@@ -7,7 +7,7 @@ class Hand_MLP(nn.Module):
         super(Hand_MLP, self).__init__()
         self.dropout_1 = nn.Dropout(p = 0.2)
         self.fc1 = nn.Linear(n_in, n_hid, bias = True)
-        self.dropout_2 = nn.Dropout(p = 0.4)
+        self.dropout_2 = nn.Dropout(p = 0.5)
         self.fc2 = nn.Linear(n_hid, 10, bias = True)
         self.relu = nn.ReLU()
         self.fc3 = nn.Linear(10,n_out, bias = True)
