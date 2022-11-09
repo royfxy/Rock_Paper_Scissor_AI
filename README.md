@@ -10,11 +10,12 @@ python main.py --run data_cap --gesture <rock|paper|scissor>
 # Train
 To train the gesture prediction model, use the following code:
 ```python
-python main.py --run train [--model_name <name_of_model>]
+python main.py --run train [--model_name <name_of_model>] [--epochs <number_of_epochs>]
 ```
+
 Using `--k_fold` will run k-fold cross validation on the model.
 ```python
-python main.py --run train [--model_name <name_of_model>] --k_fold <number_of_folds>
+python main.py --run train [--model_name <name_of_model>] --k_fold <number_of_folds>  [--epochs <number_of_epochs>]
 ```
 
 # Play the game
