@@ -131,8 +131,10 @@ dmypy.json
 # vscode
 .vscode/
 
-# models
-*.pth
 
 # dataset
 *.npy
+
+# tensorboard
+*.log
+runs/
