@@ -10,14 +10,15 @@ def parse_args():
     parser.add_argument('--model_name', type=str, default='model.pth', help='model path')
     parser.add_argument('--gesture', type=str, default='paper', help='gesture to capture')
     parser.add_argument('--k_fold', type=int, default=1, help='k fold cross validation')
+    parser.add_argument('--epochs', type=int, default=100, help='number of epochs')
 
     return parser.parse_args()
 
 if __name__ == '__main__':
     args = parse_args()
     mode = args.run
-    prediction_model_pth = "rock_paper_scissor/network/gesture_prediction/checkpoints/" + args.model_name
-    recognition_model_pth = "rock_paper_scissor/network/gesture_recognition/checkpoints/" + args.model_name
+    prediction_model_pth = "rock_paper_scissor/network/gesture_prediction/checkpoints/" + args.model_name + ".pth"
+    recognition_model_pth = "rock_paper_scissor/network/gesture_recognition/checkpoints/" + args.model_name + ".pth"
     if mode == 'game':
         game = Game(prediction_model_pth, recognition_model_pth)
         game.play()
@@ -26,10 +27,10 @@ if __name__ == '__main__':
         capture_data(file_pth, 3)
     elif mode == 'train':
         if args.k_fold == 1:
-            train_model(prediction_model_pth)
+            train_model(prediction_model_pth, args.epochs)
         else:
-            k_fold_cross_validation_train(args.k_fold, prediction_model_pth)
-    elif mode == 'train_static':
-        train_model_static(recognition_model_pth)
+            k_fold_cross_validation_train(args.k_fold, prediction_model_pth, args.epochs)
+    elif mode == 'train_recognition':
+        train_model_static(recognition_model_pth, args.epochs)
     else:
         print("invalid mode")
