@@ -2,7 +2,7 @@ import argparse
 from rock_paper_scissor.app.game import Game
 from rock_paper_scissor.network.gesture_prediction.data_capture import capture_data
 from rock_paper_scissor.network.gesture_prediction.train import train_model, k_fold_cross_validation_train
-
+from rock_paper_scissor.network.gesture_recognition.Train_from_csv import train_model_static
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -29,5 +29,7 @@ if __name__ == '__main__':
             train_model(prediction_model_pth)
         else:
             k_fold_cross_validation_train(args.k_fold, prediction_model_pth)
+    elif mode == 'train_static':
+        train_model_static(recognition_model_pth)
     else:
         print("invalid mode")
